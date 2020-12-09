@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html class="no-js" lang="">
+  <head>
+    <meta charset="utf-8" />
+    <title>Call Rates</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <style type="text/css">
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        background: #efefef;
+        font-family: system-ui;
+      }
+
+      .container {
+        margin: auto;
+        padding: 63px 12px;
+        position: relative;
+      }
+
+      .d-none {
+        display: none;
+      }
+
+      .form-wrap {
+        margin: 63px auto;
+        max-width: 550px;
+        position: relative;
+      }
+
+      @media screen and (max-width: 678px) {
+        .form-wrap {
+          max-width: 100%;
+        }
+      }
+
+      .frm-input {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: row;
+        background: #fff;
+        border: 2px solid #ddd;
+      }
+
+      .frm-input.error {
+        border: 2px solid red;
+      }
+
+      .frm-input__icon {
+        padding: 18px 19px;
+        color: #fff;
+        background: #fff;
+        position: relative;
+      }
+
+      .frm-input__icon svg {
+        position: relative;
+        top: 3px;
+      }
+
+      .frm-input__text {
+        flex: 1 1 100%;
+      }
+
+      .frm-input__text input[type="text"] {
+        margin: 0;
+        padding: 18px 32px 18px 18px;
+        background: transparent;
+        width: 100%;
+        height: 100%;
+        font-family: system-ui;
+        font-size: 1rem;
+        border: 0;
+        outline: none;
+      }
+
+      .form-results {
+        margin: 0.9em 0;
+        padding: 18px;
+        display: block;
+      }
+
+      .form-results.d-none {
+        display: none;
+      }
+
+      .form-results h3 {
+        margin: 0 0 1.2em 0;
+        padding: 0;
+        font-size: 1.1rem;
+      }
+
+      .form-results h3:before {
+        content: "";
+        margin: 0 0.5em 0 0;
+        padding: 0;
+        display: inline-block;
+        vertical-align: middle;
+        position: relative;
+        top: -2px;
+        width: 32px;
+        height: 32px;
+        background: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjxzdmcgaWQ9IkxheWVyXzEiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDUxMiA1MTI7IiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiB4bWw6c3BhY2U9InByZXNlcnZlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj48c3R5bGUgdHlwZT0idGV4dC9jc3MiPgoJLnN0MHtmaWxsOiMyQkI2NzM7fQoJLnN0MXtmaWxsOm5vbmU7c3Ryb2tlOiNGRkZGRkY7c3Ryb2tlLXdpZHRoOjMwO3N0cm9rZS1taXRlcmxpbWl0OjEwO30KPC9zdHlsZT48cGF0aCBjbGFzcz0ic3QwIiBkPSJNNDg5LDI1NS45YzAtMC4yLDAtMC41LDAtMC43YzAtMS42LDAtMy4yLTAuMS00LjdjMC0wLjktMC4xLTEuOC0wLjEtMi44YzAtMC45LTAuMS0xLjgtMC4xLTIuNyAgYy0wLjEtMS4xLTAuMS0yLjItMC4yLTMuM2MwLTAuNy0wLjEtMS40LTAuMS0yLjFjLTAuMS0xLjItMC4yLTIuNC0wLjMtMy42YzAtMC41LTAuMS0xLjEtMC4xLTEuNmMtMC4xLTEuMy0wLjMtMi42LTAuNC00ICBjMC0wLjMtMC4xLTAuNy0wLjEtMUM0NzQuMywxMTMuMiwzNzUuNywyMi45LDI1NiwyMi45UzM3LjcsMTEzLjIsMjQuNSwyMjkuNWMwLDAuMy0wLjEsMC43LTAuMSwxYy0wLjEsMS4zLTAuMywyLjYtMC40LDQgIGMtMC4xLDAuNS0wLjEsMS4xLTAuMSwxLjZjLTAuMSwxLjItMC4yLDIuNC0wLjMsMy42YzAsMC43LTAuMSwxLjQtMC4xLDIuMWMtMC4xLDEuMS0wLjEsMi4yLTAuMiwzLjNjMCwwLjktMC4xLDEuOC0wLjEsMi43ICBjMCwwLjktMC4xLDEuOC0wLjEsMi44YzAsMS42LTAuMSwzLjItMC4xLDQuN2MwLDAuMiwwLDAuNSwwLDAuN2MwLDAsMCwwLDAsMC4xczAsMCwwLDAuMWMwLDAuMiwwLDAuNSwwLDAuN2MwLDEuNiwwLDMuMiwwLjEsNC43ICBjMCwwLjksMC4xLDEuOCwwLjEsMi44YzAsMC45LDAuMSwxLjgsMC4xLDIuN2MwLjEsMS4xLDAuMSwyLjIsMC4yLDMuM2MwLDAuNywwLjEsMS40LDAuMSwyLjFjMC4xLDEuMiwwLjIsMi40LDAuMywzLjYgIGMwLDAuNSwwLjEsMS4xLDAuMSwxLjZjMC4xLDEuMywwLjMsMi42LDAuNCw0YzAsMC4zLDAuMSwwLjcsMC4xLDFDMzcuNywzOTguOCwxMzYuMyw0ODkuMSwyNTYsNDg5LjFzMjE4LjMtOTAuMywyMzEuNS0yMDYuNSAgYzAtMC4zLDAuMS0wLjcsMC4xLTFjMC4xLTEuMywwLjMtMi42LDAuNC00YzAuMS0wLjUsMC4xLTEuMSwwLjEtMS42YzAuMS0xLjIsMC4yLTIuNCwwLjMtMy42YzAtMC43LDAuMS0xLjQsMC4xLTIuMSAgYzAuMS0xLjEsMC4xLTIuMiwwLjItMy4zYzAtMC45LDAuMS0xLjgsMC4xLTIuN2MwLTAuOSwwLjEtMS44LDAuMS0yLjhjMC0xLjYsMC4xLTMuMiwwLjEtNC43YzAtMC4yLDAtMC41LDAtMC43ICBDNDg5LDI1Niw0ODksMjU2LDQ4OSwyNTUuOUM0ODksMjU2LDQ4OSwyNTYsNDg5LDI1NS45eiIgaWQ9IlhNTElEXzNfIi8+PGcgaWQ9IlhNTElEXzFfIj48bGluZSBjbGFzcz0ic3QxIiBpZD0iWE1MSURfMl8iIHgxPSIyMTMuNiIgeDI9IjM2OS43IiB5MT0iMzQ0LjIiIHkyPSIxODguMiIvPjxsaW5lIGNsYXNzPSJzdDEiIGlkPSJYTUxJRF80XyIgeDE9IjIzMy44IiB4Mj0iMTU0LjciIHkxPSIzNDUuMiIgeTI9IjI2Ni4xIi8+PC9nPjwvc3ZnPg==")
+          no-repeat;
+      }
+
+      table {
+        margin: 0;
+        border-collapse: collapse;
+        width: 100%;
+        table-layout: fixed;
+      }
+
+      table th {
+        text-align: left;
+      }
+
+      table tr {
+        border-bottom: 1px solid #ddd;
+      }
+
+      table th,
+      table td {
+        padding: 10px 0;
+      }
+
+      #rstCountry,
+      #rstCountryError {
+        text-transform: capitalize;
+      }
+
+      .form-messages {
+        margin: 0.9em 0;
+        padding: 12px 18px;
+      }
+
+      .form-messages.d-none {
+        display: none;
+      }
+
+      .form-messages h3 {
+        margin: 0 0 1.2em 0;
+        padding: 0;
+        font-size: 1.1rem;
+      }
+
+      .form-messages h3:before {
+        content: "";
+        margin: 0 0.5em 0 0;
+        padding: 0;
+        display: inline-block;
+        vertical-align: middle;
+        position: relative;
+        top: -2px;
+        width: 32px;
+        height: 32px;
+        background: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjwhRE9DVFlQRSBzdmcgIFBVQkxJQyAnLS8vVzNDLy9EVEQgU1ZHIDEuMC8vRU4nICAnaHR0cDovL3d3dy53My5vcmcvVFIvMjAwMS9SRUMtU1ZHLTIwMDEwOTA0L0RURC9zdmcxMC5kdGQnPjxzdmcgaGVpZ2h0PSIzMiIgc3R5bGU9Im92ZXJmbG93OnZpc2libGU7ZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAzMiAzMiIgdmlld0JveD0iMCAwIDMyIDMyIiB3aWR0aD0iMzIiIHhtbDpzcGFjZT0icHJlc2VydmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPjxnPjxnIGlkPSJFcnJvcl8xXyI+PGcgaWQ9IkVycm9yIj48Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiBpZD0iQkciIHI9IjE2IiBzdHlsZT0iZmlsbDojRDcyODI4OyIvPjxwYXRoIGQ9Ik0xNC41LDI1aDN2LTNoLTNWMjV6IE0xNC41LDZ2MTNoM1Y2SDE0LjV6IiBpZD0iRXhjbGFtYXRvcnlfeDVGX1NpZ24iIHN0eWxlPSJmaWxsOiNFNkU2RTY7Ii8+PC9nPjwvZz48L2c+PC9zdmc+")
+          no-repeat;
+      }
+    </style>
+  </head>
+
+  <body>
+    <main>
+      <section class="container">
+        <div class="form-wrap">
+          <div class="form-hold">
+            <form action="javascript:void(0)">
+              <div class="frm-input">
+                <div class="frm-input__icon">
+                  <?xml version="1.0" ?><svg
+                    fill="none"
+                    height="24"
+                    stroke="#000"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                    width="24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <circle cx="10.5" cy="10.5" r="7.5" />
+                    <line x1="21" x2="15.8" y1="21" y2="15.8" />
+                  </svg>
+                </div>
+                <div class="frm-input__text">
+                  <input
+                    type="text"
+                    id="country"
+                    name="country"
+                    placeholder="Search a country to call e.g Kenya"
+                  />
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="form-results d-none" id="rateResults">
+            <h3>
+              We've got you covered when calling to
+              <span id="rstCountry"></span>
+            </h3>
+            <table>
+              <thead>
+                <th scope="col"></th>
+                <th scope="col">
+                  RATES PER MIN (USD)
+                </th>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">
+                    Landline
+                  </th>
+                  <td>
+                    <span id="llRate"></span>
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">
+                    Mobile
+                  </th>
+                  <td>
+                    <span id="mbRate"></span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="form-messages d-none">
+            <h3>
+              Sorry, we do not yet support calling to
+              <span id="rstCountryError"></span>
+            </h3>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script type="text/javascript">
+      // call rates
+      let callRates = [
+        {
+          country: "kenya",
+          landline: "15.9",
+          mobile: "16.09",
+        },
+        {
+          country: "uganda",
+          landline: "45.9",
+          mobile: "41.09",
+        },
+        {
+          country: "tanzania",
+          landline: "45.9",
+          mobile: "41.09",
+        },
+        {
+          country: "malawi",
+          landline: "45.9",
+          mobile: "41.09",
+        },
+        {
+          country: "nigeria",
+          landline: "45.9",
+          mobile: "41.09",
+        },
+      ];
+
+      const formHold = document.querySelector(".frm-input");
+      const formMessages = document.querySelector(".form-messages");
+      const searchFld = document.getElementById("country");
+      const searchResults = document.getElementById("rateResults");
+      const llRateValue = document.getElementById("llRate");
+      const mbRateValue = document.getElementById("mbRate");
+      const inputCountry = document.getElementById("rstCountry");
+      const inputCountryError = document.getElementById("rstCountryError");
+
+      let timeout = null;
+
+      // get data
+      const getCallRate = (e) => {
+        clearTimeout(timeout);
+
+        // convert the input value to lowercase
+        let inputFrmValue = searchFld.value.toLowerCase();
+
+        timeout = setTimeout(() => {
+          // check for empty input and display an error
+          if (e.target.value === "") {
+            formHold.classList.add("error");
+            formMessages.classList.add("d-none");
+            searchResults.classList.add("d-none");
+            return;
+          }
+
+          // hide the results container
+          searchResults.classList.add("d-none");
+
+          // hide the  rates
+          llRateValue.innerText = "";
+          mbRateValue.innerText = "";
+
+          for (i = 0; i < callRates.length; i++) {
+            if (callRates[i].country == inputFrmValue) {
+              searchResults.classList.remove("d-none");
+              formMessages.classList.add("d-none");
+              formHold.classList.remove("error");
+
+              llRateValue.innerText = callRates[i].landline;
+              mbRateValue.innerText = callRates[i].mobile;
+              inputCountry.innerText = inputFrmValue;
+
+              break;
+            } else {
+              formMessages.classList.remove("d-none");
+              formHold.classList.add("error");
+              inputCountryError.innerText = inputFrmValue;
+            }
+          }
+        }, 1000);
+      };
+
+      searchFld.addEventListener("input", getCallRate);
+    </script>
+  </body>
+</html>
